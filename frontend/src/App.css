@@ -1,0 +1,34 @@
+#root {
+  max-width: 100%;
+  text-align: center;
+}
+
+.row {
+  position: fixed;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+
+.column-left {
+  flex: 40%;
+  text-align: center;
+  padding: 1rem;
+  background-color: aliceblue;
+  color: black;
+}
+
+.column-right {
+  flex: 60%;
+  text-align: center;
+  padding: 1rem;
+}
+
+@font-face {
+  font-family: "PoetsenOne";
+  src: local("Poetsen_One"),
+    url("./fonts/PoetsenOne-Regular.ttf") format("truetype");
+}

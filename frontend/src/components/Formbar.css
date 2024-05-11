@@ -1,0 +1,45 @@
+form {
+  position: relative;
+}
+
+.field {
+  padding-left: 1rem;
+  width: 620px;
+  height: 2rem;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  border: solid 2px;
+}
+
+.button {
+  width: 115px;
+  height: 2.5rem;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  background-color: aliceblue;
+  color: black;
+  cursor: pointer;
+}
+
+.button:disabled {
+  color: gray;
+  cursor: auto;
+}
+
+.button:enabled:hover {
+  font-weight: bold;
+}
+
+p {
+  font-size: 1.5rem;
+}
+
+span {
+  font-weight: bold;
+  font-style: italic;
+}
+
+span:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
