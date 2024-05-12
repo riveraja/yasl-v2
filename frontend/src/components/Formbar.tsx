@@ -7,7 +7,7 @@ export function FormBar() {
     const [isShown, setIsShown] = useState(false)
     const [isSubmitDisabled, setIsSubmitDisabled] = useState(true)
 
-    const shortenurl = `http://localhost:8000/api/v1/shorten?url=${inputValue}`
+    const shortenurl = `${import.meta.env.VITE_API_PREFIX}/shorten?url=${inputValue}`
 
     function copy(text: string) {
         navigator.clipboard.writeText(text)
