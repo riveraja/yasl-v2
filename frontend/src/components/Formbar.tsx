@@ -1,11 +1,13 @@
 import './Formbar.css'
 import { useState } from 'react'
+import { z } from 'zod'
 
 export function FormBar() {
     const [inputValue, setInputValue] = useState('')
     const [outputValue, setOutputValue] = useState('')
     const [isShown, setIsShown] = useState(false)
     const [isSubmitDisabled, setIsSubmitDisabled] = useState(true)
+    const validUrl = z.string().url()
 
     const shortenurl = `${import.meta.env.VITE_API_PREFIX}/shorten?url=${inputValue}`
 
@@ -16,10 +18,13 @@ export function FormBar() {
     async function onInputChange(event: any) {
         setInputValue(event.target.value)
         if (event.target.value === '')  {
-        setIsSubmitDisabled(true)
-        setIsShown(false)
+          setIsSubmitDisabled(true)
+          setIsShown(false)
         } else {
-        setIsSubmitDisabled(false)
+          const { success } = validUrl.safeParse(inputValue)
+          if (success) {
+            setIsSubmitDisabled(false)
+          }
         }
     }
 
