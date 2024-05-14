@@ -13,7 +13,8 @@ const app = new Elysia({ prefix: "/api/v1" })
     .get("/shorten", async ({ request, query, set }) => {
       const headerOrigin = request.headers.get('origin')
       const { statusCode, headers } = await undici.request(query.url)
-      if (statusCode === 200 && headers['content-type'] === 'text/html; charset=utf-8') {
+      console.log(query.url, statusCode, headers['content-type']) // debug only
+      if (statusCode === 200 || 301 && headers['content-type'] === 'text/html; charset=utf-8') {
         const urlExists = checkDuplicateUrl(query.url)
         set.status = 201
         const hashStr = crypto.createHash('SHA256').update(query.url).digest('hex').slice(0,10)
