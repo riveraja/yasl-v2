@@ -1,19 +1,20 @@
-import { Elysia, error, t } from "elysia"
+import { Elysia, t } from "elysia"
 import * as crypto from 'crypto'
 import { insertUrl, checkDuplicateUrl, getLongUrl } from "./db"
 import { cors } from '@elysiajs/cors'
 import * as undici from 'undici'
 
+const logger = require('pino')()
 const PORT: number = +(process.env.PORT || 5173)
-const NODE_ENV = process.env.NODE_ENV ?? "development"
 
 const app = new Elysia({ prefix: "/api/v1" })
     .use(cors())
     .get("/", () => "Nothing to see here.")
     .get("/shorten", async ({ request, query, set }) => {
       const headerOrigin = request.headers.get('origin')
+      logger.info(`request origin ${headerOrigin}`)
       const { statusCode, headers } = await undici.request(query.url)
-      console.log(query.url, statusCode, headers['content-type']) // debug only
+      logger.debug(query.url, statusCode, headers['content-type']) // debug only
       if (statusCode === 200 || 301 && headers['content-type'] === 'text/html; charset=utf-8') {
         const urlExists = checkDuplicateUrl(query.url)
         set.status = 201
@@ -55,6 +56,6 @@ const app = new Elysia({ prefix: "/api/v1" })
     })
     .listen(PORT);
 
-console.log(
+logger.info(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
 );
