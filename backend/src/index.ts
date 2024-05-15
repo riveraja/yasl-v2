@@ -13,8 +13,12 @@ const app = new Elysia({ prefix: "/api/v1" })
     .get("/shorten", async ({ request, query, set }) => {
       const headerOrigin = request.headers.get('origin')
       logger.info(`request origin ${headerOrigin}`)
-      const { statusCode, headers } = await undici.request(query.url)
-      logger.debug(query.url, statusCode, headers['content-type']) // debug only
+      logger.debug(query.url)
+      const { statusCode, headers } = await undici.request(query.url, {
+        method: 'HEAD',
+        signal: AbortSignal.timeout(5000)
+      })
+      logger.debug(statusCode, headers['content-type']) // debug only
       if (statusCode === 200 || 301 && headers['content-type'] === 'text/html; charset=utf-8') {
         const urlExists = checkDuplicateUrl(query.url)
         set.status = 201
@@ -29,11 +33,11 @@ const app = new Elysia({ prefix: "/api/v1" })
           })
         
         return {
-          short_url: `${headerOrigin}/${hashStr}`
+          result: `${headerOrigin}/${hashStr}`
         }
       } else {
         return {
-          short_url: 'Invalid URL'
+          result: 'Invalid URL'
         }
       }
       
@@ -42,7 +46,7 @@ const app = new Elysia({ prefix: "/api/v1" })
         url: t.String()
       }),
       response: t.Object({
-        short_url: t.String()
+        result: t.String()
       })
     })
     .get('/longurl', ({ query, set }) => {
