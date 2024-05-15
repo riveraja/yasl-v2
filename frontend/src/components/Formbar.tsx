@@ -22,8 +22,7 @@ export function FormBar() {
           setIsSubmitDisabled(true) // disable submit button
           setIsShown(false) // hide short url
         } else {
-          const { success } = validUrl.safeParse(inputValue)
-          if (success) {
+          if (validUrl.safeParse(event.target.value).success) {
             setIsSubmitDisabled(false) // enable submit button
           }
         }
@@ -32,11 +31,13 @@ export function FormBar() {
     async function handleSubmit(event: any) {
         event.preventDefault()
         setLoading(true) // show loading spinner
-        await fetch(shortenurl).then((res) => {
+        await fetch(shortenurl, {
+          signal: AbortSignal.timeout(5000)
+        }).then((res) => {
           return res.json()
-        }).then((val) => {
+        }).then((data) => {
           setLoading(false) // hide loading spinner
-          setOutputValue(val.short_url) // set short url
+          setOutputValue(data.result) // set short url
           setIsShown(true) // show short url
           setIsSubmitDisabled(true) // disable submit button
         })

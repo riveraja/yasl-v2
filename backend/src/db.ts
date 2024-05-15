@@ -26,7 +26,7 @@ export const checkDuplicateUrl = async ( longUrl: string ) => {
         if (Object.keys(result).length === 1) return true
     } catch (error) {
         logger.info(error)
-        throw new Error("Failed to query the database to find duplicates.");
+        return false
     }
 
     return false
