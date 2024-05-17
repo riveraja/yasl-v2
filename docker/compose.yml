@@ -6,10 +6,24 @@ services:
     environment:
       - POSTGRES_USER=yasl
       - POSTGRES_PASSWORD=yaslPass01
+    command: [ "postgres", "-c", "wal_level=logical" ]
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
       - 54322:5432
+  
+  # readyset:
+  #   container_name: readyset
+  #   image: readysettech/readyset
+  #   restart: always
+  #   environment:
+  #     - UPSTREAM_DB_URL=postgresql://yasl:yaslPass01@pg:5432/postgres
+  #     - LISTEN_ADDRESS=0.0.0.0:5433
+  #   ports:
+  #     - 54333:5433
+  #     - 60344:6034
+  #   depends_on:
+  #     - pg
   
 volumes:
   pgdata:
