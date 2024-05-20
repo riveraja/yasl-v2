@@ -3,12 +3,26 @@ import * as crypto from 'crypto'
 import { insertUrl, checkDuplicateUrl, getLongUrl } from "./db"
 import { cors } from '@elysiajs/cors'
 import * as undici from 'undici'
+import { rateLimit } from 'elysia-rate-limit'
+import { ip } from "elysia-ip"
 
 const logger = require('pino')()
 const PORT: number = +(process.env.PORT || 5173)
 
 const app = new Elysia({ prefix: "/api/v1" })
     .use(cors())
+    .use(ip())
+    .use(rateLimit({
+      duration: +(process.env.RATE_LIMIT_DURATION || 60000),
+      max: +(process.env.RATE_LIMIT_MAX || 10),
+      errorResponse: new Response("rate-limited", {
+        status: 429,
+        headers: new Headers({
+          'Content-Type': 'text/plain',
+          'Custom-Header': 'custom',
+        })
+      })
+    }))
     .get("/", () => "Nothing to see here.")
     .get("/shorten", async ({ request, query, set }) => {
       const headerOrigin = request.headers.get('origin')
@@ -51,6 +65,7 @@ const app = new Elysia({ prefix: "/api/v1" })
     })
     .get('/longurl', ({ query, set }) => {
       const res = getLongUrl(query.short)
+      set.status = 200
       return res
     }, {
       query: t.Object({

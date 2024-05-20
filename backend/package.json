@@ -12,6 +12,8 @@
     "drizzle-orm": "^0.30.10",
     "drizzle-typebox": "^0.1.1",
     "elysia": "latest",
+    "elysia-ip": "^1.0.6",
+    "elysia-rate-limit": "^4.0.0",
     "pino": "^9.1.0",
     "postgres": "^3.4.4",
     "undici": "^6.16.1"
