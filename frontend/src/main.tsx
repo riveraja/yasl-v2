@@ -15,7 +15,7 @@ if (href_filtered.length == 2) {
 }
 
 if (href_filtered.length == 3) {
-  const apiUrl = `http://localhost:8000/api/v1/longurl?short=${href_filtered[2]}`
+  const apiUrl = `${import.meta.env.VITE_API_PREFIX}/longurl?short=${href_filtered[2]}`
   await fetch(apiUrl).then(function(response) {
     return response.text()
   }).then(function(data) {
